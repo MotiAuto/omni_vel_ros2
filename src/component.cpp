@@ -16,7 +16,7 @@ namespace omni_vel_ros2
             std::bind(&OmniVelROS2::posture_callback, this, _1)
         );
 
-        publisher_ = this->create_publisher<std_msgs::msg::Int64MultiArray>("/target_rpm", 0);
+        publisher_ = this->create_publisher<std_msgs::msg::Int64MultiArray>("/target_output", 0);
 
         this->declare_parameter("robot_radius", 1.0);
         this->get_parameter("robot_radius", robot_radius_param);
@@ -28,12 +28,18 @@ namespace omni_vel_ros2
         this->get_parameter("wheel_rad_2", wheels_rad[1]);
         this->declare_parameter("wheel_rad_3", -120.0);
         this->get_parameter("wheel_rad_3", wheels_rad[2]);
+        this->declare_parameter("pwm_mode", false);
+        this->get_parameter("pwm_mode", pwm_flag);
 
         posture.x = 0.0;
         posture.y = 0.0;
         posture.z = 0.0;
 
-        omni_wheel = std::make_shared<OmniWheel<double>>(wheel_radius_param, robot_radius_param, wheels_rad);
+        wheels_rad[0] = wheels_rad[0] * (M_PI / 180.0);
+        wheels_rad[1] = wheels_rad[1] * (M_PI / 180.0);
+        wheels_rad[2] = wheels_rad[2] * (M_PI / 180.0);
+
+        omni_wheel = std::make_shared<OmniWheel<double>>(wheel_radius_param, robot_radius_param, wheels_rad, pwm_flag);
 
         RCLCPP_INFO(this->get_logger(), "Start OmniVelROS2");
     }

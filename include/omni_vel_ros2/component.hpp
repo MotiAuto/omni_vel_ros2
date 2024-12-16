@@ -29,6 +29,7 @@ namespace omni_vel_ros2
 
         double robot_radius_param, wheel_radius_param;
         std::array<double, 3> wheels_rad;
+        bool pwm_flag;
     };
 }
 
