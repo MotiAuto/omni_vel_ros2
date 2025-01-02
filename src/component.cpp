@@ -6,17 +6,17 @@ namespace omni_vel_ros2
     {
         cmd_subscriber = this->create_subscription<geometry_msgs::msg::Twist>(
             "/cmd_vel",
-            0,
+            rclcpp::SystemDefaultsQoS(),
             std::bind(&OmniVelROS2::cmd_callback, this, _1)
         );
 
         posture_subscriber = this->create_subscription<geometry_msgs::msg::Vector3>(
             "/posture",
-            0,
+            rclcpp::SystemDefaultsQoS(),
             std::bind(&OmniVelROS2::posture_callback, this, _1)
         );
 
-        publisher_ = this->create_publisher<std_msgs::msg::Int64MultiArray>("/target_output", 0);
+        publisher_ = this->create_publisher<std_msgs::msg::Int64MultiArray>("/target_output", rclcpp::SystemDefaultsQoS());
 
         this->declare_parameter("robot_radius", 1.0);
         this->get_parameter("robot_radius", robot_radius_param);
